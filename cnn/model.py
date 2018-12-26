@@ -1,13 +1,22 @@
-import torch
-import torch.nn as nn
-from operations import *
-from torch.autograd import Variable
-from utils import drop_path
+import  torch
+import  torch.nn as nn
+from    operations import *
+from    torch.autograd import Variable
+from    utils import drop_path
 
 
 class Cell(nn.Module):
 
     def __init__(self, genotype, C_prev_prev, C_prev, C, reduction, reduction_prev):
+        """
+
+        :param genotype:
+        :param C_prev_prev:
+        :param C_prev:
+        :param C:
+        :param reduction:
+        :param reduction_prev:
+        """
         super(Cell, self).__init__()
 
         print(C_prev_prev, C_prev, C)
@@ -27,7 +36,17 @@ class Cell(nn.Module):
         self._compile(C, op_names, indices, concat, reduction)
 
     def _compile(self, C, op_names, indices, concat, reduction):
+        """
+
+        :param C:
+        :param op_names:
+        :param indices:
+        :param concat:
+        :param reduction:
+        :return:
+        """
         assert len(op_names) == len(indices)
+
         self._steps = len(op_names) // 2
         self._concat = concat
         self.multiplier = len(concat)
@@ -40,6 +59,13 @@ class Cell(nn.Module):
         self._indices = indices
 
     def forward(self, s0, s1, drop_prob):
+        """
+
+        :param s0:
+        :param s1:
+        :param drop_prob:
+        :return:
+        """
         s0 = self.preprocess0(s0)
         s1 = self.preprocess1(s1)
 
@@ -51,11 +77,13 @@ class Cell(nn.Module):
             op2 = self._ops[2 * i + 1]
             h1 = op1(h1)
             h2 = op2(h2)
+
             if self.training and drop_prob > 0.:
                 if not isinstance(op1, Identity):
                     h1 = drop_path(h1, drop_prob)
                 if not isinstance(op2, Identity):
                     h2 = drop_path(h2, drop_prob)
+
             s = h1 + h2
             states += [s]
         return torch.cat([states[i] for i in self._concat], dim=1)

@@ -1,16 +1,23 @@
-import torch
-import numpy as np
-import torch.nn as nn
-from torch.autograd import Variable
+import  torch
+import  numpy as np
+import  torch.nn as nn
+from    torch.autograd import Variable
 
 
 def _concat(xs):
     return torch.cat([x.view(-1) for x in xs])
 
 
-class Architect(object):
+
+
+class Architect:
 
     def __init__(self, model, args):
+        """
+
+        :param model:
+        :param args:
+        """
         self.network_momentum = args.momentum
         self.network_weight_decay = args.weight_decay
         self.model = model
@@ -31,7 +38,7 @@ class Architect(object):
         return unrolled_model
 
     def step(self, input_train, target_train, input_valid, target_valid, eta, network_optimizer, unrolled):
-        self.optimizer.zero_grad()
+        self.optimizer.zero_grad() # zero alpha parameters
         if unrolled:
             self._backward_step_unrolled(input_train, target_train, input_valid, target_valid, eta, network_optimizer)
         else:

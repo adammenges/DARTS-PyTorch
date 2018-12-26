@@ -19,7 +19,7 @@ from architect import Architect
 
 parser = argparse.ArgumentParser("cifar")
 parser.add_argument('--data', type=str, default='../data', help='location of the data corpus')
-parser.add_argument('--batch_size', type=int, default=40, help='batch size')
+parser.add_argument('--batch_size', type=int, default=30, help='batch size')
 parser.add_argument('--learning_rate', type=float, default=0.025, help='init learning rate')
 parser.add_argument('--learning_rate_min', type=float, default=0.001, help='min learning rate')
 parser.add_argument('--momentum', type=float, default=0.9, help='momentum')
@@ -43,6 +43,7 @@ parser.add_argument('--arch_weight_decay', type=float, default=1e-3, help='weigh
 args = parser.parse_args()
 
 args.save = 'search-{}-{}'.format(args.save, time.strftime("%Y%m%d-%H%M%S"))
+args.save = 'exp'
 utils.create_exp_dir(args.save, scripts_to_save=glob.glob('*.py'))
 
 log_format = '%(asctime)s %(message)s'
@@ -55,10 +56,10 @@ logging.getLogger().addHandler(fh)
 CIFAR_CLASSES = 10
 
 
+
+
 def main():
-    if not torch.cuda.is_available():
-        logging.info('no gpu device available')
-        sys.exit(1)
+
 
     args.unrolled = True
 
@@ -71,10 +72,9 @@ def main():
     logging.info('gpu device = %d' % args.gpu)
     logging.info("args = %s", args)
 
-    criterion = nn.CrossEntropyLoss()
-    criterion = criterion.cuda()
-    model = Network(args.init_channels, CIFAR_CLASSES, args.layers, criterion)
-    model = model.cuda()
+    criterion = nn.CrossEntropyLoss().cuda()
+    # 16, 10, 8,
+    model = Network(args.init_channels, CIFAR_CLASSES, args.layers, criterion).cuda()
     logging.info("param size = %fMB", utils.count_parameters_in_MB(model))
 
     optimizer = torch.optim.SGD(
@@ -132,15 +132,15 @@ def train(train_queue, valid_queue, model, architect, criterion, optimizer, lr):
     top1 = utils.AvgrageMeter()
     top5 = utils.AvgrageMeter()
 
-    for step, (input, target) in enumerate(train_queue):
+    for step, (input, target) in enumerate(train_queue): # [b, 3, 32, 32], [40]
         model.train()
-        n = input.size(0)
+        n = input.size(0) # 40
 
         input = Variable(input, requires_grad=False).cuda()
         target = Variable(target, requires_grad=False).cuda(async=True)
 
         # get a random minibatch from the search queue with replacement
-        input_search, target_search = next(iter(valid_queue))
+        input_search, target_search = next(iter(valid_queue)) # [b, 3, 32, 32], [b]
         input_search = Variable(input_search, requires_grad=False).cuda()
         target_search = Variable(target_search, requires_grad=False).cuda(async=True)
 
