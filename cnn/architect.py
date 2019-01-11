@@ -4,7 +4,13 @@ import  torch.nn as nn
 from    torch.autograd import Variable
 
 
+
+
+
+
+
 def _concat(xs):
+
     return torch.cat([x.view(-1) for x in xs])
 
 
@@ -22,10 +28,12 @@ class Architect:
         self.network_weight_decay = args.weight_decay
         self.model = model
         self.optimizer = torch.optim.Adam(self.model.arch_parameters(),
-                                          lr=args.arch_learning_rate, betas=(0.5, 0.999),
+                                          lr=args.arch_learning_rate,
+                                          betas=(0.5, 0.999),
                                           weight_decay=args.arch_weight_decay)
 
     def _compute_unrolled_model(self, input, target, eta, network_optimizer):
+
         loss = self.model._loss(input, target)
         theta = _concat(self.model.parameters()).data
         try:
