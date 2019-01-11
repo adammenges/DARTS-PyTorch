@@ -187,6 +187,16 @@ class NetworkCIFAR(nn.Module):
         return logits, logits_aux
 
 
+
+
+
+
+
+
+
+
+
+
 class NetworkImageNet(nn.Module):
 
     def __init__(self, C, num_classes, layers, auxiliary, genotype):

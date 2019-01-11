@@ -111,6 +111,7 @@ class Cell(nn.Module):
         # for each node, receive input from all previous intermediate nodes and s0, s1
         for i in range(self._steps): # 4
             # [40, 16, 32, 32]
+            # equal to: t1 + t2 + ... + tn
             s = sum(self._ops[offset + j](h, weights[offset + j]) for j, h in enumerate(states))
             offset += len(states)
             states.append(s)
@@ -263,4 +264,5 @@ class Network(nn.Module):
             normal=gene_normal, normal_concat=concat,
             reduce=gene_reduce, reduce_concat=concat
         )
+
         return genotype

@@ -30,3 +30,113 @@
 2019-01-11 15:25:41,002 epoch 0 lr 2.500000e-02
 2019-01-11 15:25:41,003 genotype = Genotype(normal=[('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('dil_conv_3x3', 1), ('dil_conv_5x5', 2), ('max_pool_3x3', 1), ('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('avg_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('avg_pool_3x3', 1), ('avg_pool_3x3', 0), ('sep_conv_3x3', 1), ('dil_conv_5x5', 2), ('sep_conv_3x3', 2), ('avg_pool_3x3', 3), ('max_pool_3x3', 4), ('dil_conv_5x5', 0)], reduce_concat=range(2, 6))
 2019-01-11 15:25:46,646 train 000 2.384387e+00 0.000000 50.000000
+2019-01-11 15:30:33,362 train 050 2.889809e+00 11.764706 47.058824
+2019-01-11 15:30:40,014 gpu device = 0
+2019-01-11 15:30:40,014 args = Namespace(arch_learning_rate=0.0003, arch_weight_decay=0.001, batch_size=2, cutout=False, cutout_length=16, data='../data', drop_path_prob=0.3, epochs=50, gpu=0, grad_clip=5, init_channels=16, layers=8, learning_rate=0.025, learning_rate_min=0.001, model_path='saved_models', momentum=0.9, report_freq=50, save='exp', seed=2, train_portion=0.5, unrolled=True, weight_decay=0.0003)
+2019-01-11 15:30:42,523 param size = 1.930618MB
+2019-01-11 15:30:43,497 epoch 0 lr 2.500000e-02
+2019-01-11 15:30:43,535 genotype = Genotype(normal=[('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('dil_conv_3x3', 1), ('dil_conv_5x5', 2), ('max_pool_3x3', 1), ('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('avg_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('avg_pool_3x3', 1), ('avg_pool_3x3', 0), ('sep_conv_3x3', 1), ('dil_conv_5x5', 2), ('sep_conv_3x3', 2), ('avg_pool_3x3', 3), ('max_pool_3x3', 4), ('dil_conv_5x5', 0)], reduce_concat=range(2, 6))
+2019-01-11 15:30:50,766 train 000 2.384347e+00 0.000000 50.000000
+2019-01-11 15:36:14,553 train 100 3.059173e+00 13.366337 50.990099
+2019-01-11 15:36:34,410 train 050 2.923360e+00 9.803922 48.039216
+2019-01-11 15:41:45,324 train 150 2.986647e+00 12.913907 53.311258
+2019-01-11 15:42:04,724 train 100 2.944887e+00 11.386139 52.970297
+2019-01-11 15:47:21,596 train 200 2.923087e+00 11.691542 52.736318
+2019-01-11 15:47:40,338 train 150 2.879280e+00 11.258278 54.966887
+2019-01-11 15:52:56,225 train 250 2.856892e+00 11.354582 52.589641
+2019-01-11 15:53:15,207 train 200 2.807394e+00 10.696517 54.477612
+2019-01-11 15:58:27,341 train 300 2.837057e+00 10.465116 51.827243
+2019-01-11 15:58:46,969 train 250 2.729832e+00 10.956175 56.772908
+2019-01-11 16:03:53,382 train 350 2.792246e+00 10.826211 51.139601
+2019-01-11 16:04:11,967 train 300 2.688672e+00 10.963455 54.983389
+2019-01-11 16:09:17,891 train 400 2.749957e+00 11.097257 50.000000
+2019-01-11 16:09:37,148 train 350 2.642291e+00 11.111111 55.840456
+2019-01-11 16:14:46,300 train 450 2.713502e+00 10.643016 50.110865
+2019-01-11 16:15:04,867 train 400 2.599734e+00 11.720698 57.605985
+2019-01-11 16:20:10,760 train 500 2.680509e+00 10.578842 49.900200
+2019-01-11 16:20:29,671 train 450 2.573998e+00 11.419069 57.538803
+2019-01-11 16:25:42,944 train 550 2.653644e+00 10.617060 50.090744
+2019-01-11 16:26:02,901 train 500 2.540275e+00 12.375250 57.784431
+2019-01-11 16:31:18,117 train 600 2.632526e+00 10.399334 50.415973
+2019-01-11 16:31:37,044 train 550 2.519074e+00 12.794918 58.076225
+2019-01-11 16:34:48,657 gpu device = 0
+2019-01-11 16:34:48,658 args = Namespace(arch_learning_rate=0.0003, arch_weight_decay=0.001, batch_size=2, cutout=False, cutout_length=16, data='../data', drop_path_prob=0.3, epochs=50, gpu=0, grad_clip=5, init_channels=16, layers=8, learning_rate=0.025, learning_rate_min=0.001, model_path='saved_models', momentum=0.9, report_freq=50, save='exp', seed=2, train_portion=0.5, unrolled=True, weight_decay=0.0003)
+2019-01-11 16:36:43,117 train 650 2.612209e+00 10.522273 50.844854
+2019-01-11 16:37:02,979 train 600 2.500453e+00 13.061564 58.818636
+2019-01-11 16:42:13,060 train 700 2.597499e+00 10.556348 51.141227
+2019-01-11 16:42:32,104 train 650 2.485855e+00 12.980031 58.678955
+2019-01-11 16:47:39,239 train 750 2.580786e+00 10.652463 51.797603
+2019-01-11 16:47:58,571 train 700 2.471196e+00 13.552068 59.058488
+2019-01-11 16:53:21,736 train 800 2.571651e+00 10.486891 52.059925
+2019-01-11 16:53:42,962 train 750 2.460502e+00 13.648469 58.988016
+2019-01-11 16:57:13,452 param size = 1.930618MB
+2019-01-11 16:57:48,444 epoch 0 lr 2.500000e-02
+2019-01-11 16:57:49,047 genotype = Genotype(normal=[('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('dil_conv_3x3', 1), ('dil_conv_5x5', 2), ('max_pool_3x3', 1), ('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('avg_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('avg_pool_3x3', 1), ('avg_pool_3x3', 0), ('sep_conv_3x3', 1), ('dil_conv_5x5', 2), ('sep_conv_3x3', 2), ('avg_pool_3x3', 3), ('max_pool_3x3', 4), ('dil_conv_5x5', 0)], reduce_concat=range(2, 6))
+2019-01-11 16:59:00,109 train 850 2.558403e+00 10.869565 52.467685
+2019-01-11 16:59:19,262 train 800 2.450680e+00 13.545568 58.614232
+2019-01-11 16:59:52,414 train 000 2.384386e+00 0.000000 50.000000
+2019-01-11 17:00:30,401 gpu device = 0
+2019-01-11 17:00:30,402 args = Namespace(arch_learning_rate=0.0003, arch_weight_decay=0.001, batch_size=2, cutout=False, cutout_length=16, data='../data', drop_path_prob=0.3, epochs=50, gpu=0, grad_clip=5, init_channels=16, layers=8, learning_rate=0.025, learning_rate_min=0.001, model_path='saved_models', momentum=0.9, report_freq=50, save='exp', seed=2, train_portion=0.5, unrolled=True, weight_decay=0.0003)
+2019-01-11 17:03:56,716 train 900 2.543721e+00 11.154273 52.885683
+2019-01-11 17:08:55,518 train 950 2.532155e+00 11.514196 52.944269
+2019-01-11 17:13:35,365 train 1000 2.523088e+00 11.638362 53.046953
+2019-01-11 17:18:14,205 train 1050 2.515017e+00 11.893435 53.187441
+2019-01-11 17:22:52,842 train 1100 2.507348e+00 11.807448 53.405995
+2019-01-11 17:27:35,323 train 1150 2.498971e+00 11.815812 53.518679
+2019-01-11 17:32:37,350 train 1200 2.489549e+00 11.948376 53.913405
+2019-01-11 17:37:25,245 train 1250 2.481387e+00 12.030376 54.156675
+2019-01-11 17:42:16,781 train 1300 2.472155e+00 12.029208 54.803997
+2019-01-11 17:47:22,500 train 1350 2.466950e+00 12.139156 54.848261
+2019-01-11 17:52:30,012 train 1400 2.461983e+00 12.241256 55.103498
+2019-01-11 17:57:39,576 train 1450 2.450301e+00 12.715369 55.547898
+2019-01-11 18:02:42,781 train 1500 2.444635e+00 12.858095 55.896069
+2019-01-11 18:07:42,652 train 1550 2.438228e+00 12.765957 56.221792
+2019-01-11 18:12:28,873 train 1600 2.430548e+00 13.085572 56.527171
+2019-01-11 18:17:00,750 train 1650 2.427512e+00 13.234403 56.602059
+2019-01-11 18:21:29,501 train 1700 2.422117e+00 13.345091 56.819518
+2019-01-11 18:25:57,815 train 1750 2.415644e+00 13.449457 57.281553
+2019-01-11 18:30:26,447 train 1800 2.409028e+00 13.714603 57.495836
+2019-01-11 18:34:54,813 train 1850 2.405540e+00 13.884387 57.671529
+2019-01-11 18:39:23,825 train 1900 2.403691e+00 13.729616 57.759074
+2019-01-11 18:43:52,864 train 1950 2.401721e+00 13.685290 57.893388
+2019-01-11 18:48:22,744 train 2000 2.397691e+00 13.718141 58.020990
+2019-01-11 18:52:51,445 train 2050 2.395395e+00 13.773769 57.996099
+2019-01-11 18:57:21,155 train 2100 2.392162e+00 13.874346 58.067587
+2019-01-11 19:01:51,160 train 2150 2.387973e+00 14.063226 58.298466
+2019-01-11 19:06:20,993 train 2200 2.382683e+00 14.175375 58.541572
+2019-01-11 19:10:50,732 train 2250 2.377433e+00 14.326966 58.773878
+2019-01-11 19:15:22,708 train 2300 2.375338e+00 14.298131 58.930900
+2019-01-11 19:19:56,596 train 2350 2.373877e+00 14.227988 59.038707
+2019-01-11 19:24:35,584 train 2400 2.370761e+00 14.327364 59.246147
+2019-01-11 19:29:16,906 train 2450 2.368540e+00 14.279886 59.363525
+2019-01-11 19:33:49,135 train 2500 2.367138e+00 14.294282 59.376250
+2019-01-11 19:38:23,765 train 2550 2.363705e+00 14.327715 59.506076
+2019-01-11 19:43:30,209 train 2600 2.359684e+00 14.417532 59.727028
+2019-01-11 19:48:01,718 train 2650 2.357559e+00 14.409657 59.788759
+2019-01-11 19:52:28,878 train 2700 2.353356e+00 14.568678 60.070344
+2019-01-11 19:57:15,252 train 2750 2.351826e+00 14.612868 60.087241
+2019-01-11 20:02:03,686 train 2800 2.349990e+00 14.637629 60.157087
+2019-01-11 20:05:50,465 gpu device = 0
+2019-01-11 20:05:50,465 args = Namespace(arch_learning_rate=0.0003, arch_weight_decay=0.001, batch_size=2, cutout=False, cutout_length=16, data='../data', drop_path_prob=0.3, epochs=50, gpu=0, grad_clip=5, init_channels=16, layers=8, learning_rate=0.025, learning_rate_min=0.001, model_path='saved_models', momentum=0.9, report_freq=50, save='exp', seed=2, train_portion=0.5, unrolled=True, weight_decay=0.0003)
+2019-01-11 20:05:54,026 param size = 1.930618MB
+2019-01-11 20:05:54,963 epoch 0 lr 2.500000e-02
+2019-01-11 20:05:54,963 genotype = Genotype(normal=[('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('dil_conv_3x3', 1), ('dil_conv_5x5', 2), ('max_pool_3x3', 1), ('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('avg_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('avg_pool_3x3', 1), ('avg_pool_3x3', 0), ('sep_conv_3x3', 1), ('dil_conv_5x5', 2), ('sep_conv_3x3', 2), ('avg_pool_3x3', 3), ('max_pool_3x3', 4), ('dil_conv_5x5', 0)], reduce_concat=range(2, 6))
+2019-01-11 20:06:01,263 train 000 2.384347e+00 0.000000 50.000000
+2019-01-11 20:06:49,981 train 2850 2.347292e+00 14.661522 60.312171
+2019-01-11 20:11:31,282 train 2900 2.344646e+00 14.667356 60.444674
+2019-01-11 20:16:26,441 train 2950 2.343797e+00 14.672992 60.504914
+2019-01-11 20:21:10,508 train 3000 2.341255e+00 14.795068 60.713096
+2019-01-11 20:25:57,235 train 3050 2.337664e+00 14.913143 60.947230
+2019-01-11 20:30:35,566 train 3100 2.334365e+00 14.995163 61.077072
+2019-01-11 20:33:50,790 gpu device = 0
+2019-01-11 20:33:50,790 args = Namespace(arch_learning_rate=0.0003, arch_weight_decay=0.001, batch_size=2, cutout=False, cutout_length=16, data='../data', drop_path_prob=0.3, epochs=50, gpu=0, grad_clip=5, init_channels=16, layers=8, learning_rate=0.025, learning_rate_min=0.001, model_path='saved_models', momentum=0.9, report_freq=50, save='exp', seed=2, train_portion=0.5, unrolled=True, weight_decay=0.0003)
+2019-01-11 20:33:53,013 param size = 1.930618MB
+2019-01-11 20:33:53,811 epoch 0 lr 2.500000e-02
+2019-01-11 20:33:53,811 genotype = Genotype(normal=[('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('dil_conv_3x3', 1), ('dil_conv_5x5', 2), ('max_pool_3x3', 1), ('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('avg_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('avg_pool_3x3', 1), ('avg_pool_3x3', 0), ('sep_conv_3x3', 1), ('dil_conv_5x5', 2), ('sep_conv_3x3', 2), ('avg_pool_3x3', 3), ('max_pool_3x3', 4), ('dil_conv_5x5', 0)], reduce_concat=range(2, 6))
+2019-01-11 20:33:59,644 train epoch:000 loss:2.384387 acc1:0.000000 acc5:50.000000
+2019-01-11 20:34:31,668 gpu device = 0
+2019-01-11 20:34:31,668 args = Namespace(arch_learning_rate=0.0003, arch_weight_decay=0.001, batch_size=6, cutout=False, cutout_length=16, data='../data', drop_path_prob=0.3, epochs=50, gpu=0, grad_clip=5, init_channels=16, layers=8, learning_rate=0.025, learning_rate_min=0.001, model_path='saved_models', momentum=0.9, report_freq=50, save='exp', seed=2, train_portion=0.5, unrolled=True, weight_decay=0.0003)
+2019-01-11 20:34:34,106 param size = 1.930618MB
+2019-01-11 20:34:34,926 epoch 0 lr 2.500000e-02
+2019-01-11 20:34:34,927 genotype = Genotype(normal=[('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('dil_conv_3x3', 1), ('dil_conv_5x5', 2), ('max_pool_3x3', 1), ('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('avg_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('avg_pool_3x3', 1), ('avg_pool_3x3', 0), ('sep_conv_3x3', 1), ('dil_conv_5x5', 2), ('sep_conv_3x3', 2), ('avg_pool_3x3', 3), ('max_pool_3x3', 4), ('dil_conv_5x5', 0)], reduce_concat=range(2, 6))
+2019-01-11 20:34:41,041 train epoch:000 loss:2.516515 acc1:0.000000 acc5:33.333332

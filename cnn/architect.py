@@ -10,7 +10,12 @@ from    torch.autograd import Variable
 
 
 def _concat(xs):
-
+    """
+    flatten all tensor from [d1,d2,...dn] to [d]
+    and then concat all [d_1] to [d_1+d_2+d_3+...]
+    :param xs:
+    :return:
+    """
     return torch.cat([x.view(-1) for x in xs])
 
 
@@ -36,9 +41,11 @@ class Architect:
 
         loss = self.model._loss(input, target)
         theta = _concat(self.model.parameters()).data
+        # theta: torch.Size([1930618])
+        # print('theta:', theta.shape)
         try:
-            moment = _concat(network_optimizer.state[v]['momentum_buffer'] for v in self.model.parameters()).mul_(
-                self.network_momentum)
+            moment = _concat(network_optimizer.state[v]['momentum_buffer'] for v in self.model.parameters())\
+                .mul_(self.network_momentum)
         except:
             moment = torch.zeros_like(theta)
         dtheta = _concat(torch.autograd.grad(loss, self.model.parameters())).data + self.network_weight_decay * theta
