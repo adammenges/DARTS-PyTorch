@@ -1,7 +1,6 @@
 import  torch
 import  numpy as np
 import  torch.nn as nn
-from    torch.autograd import Variable
 
 
 
@@ -80,7 +79,7 @@ class Architect:
 
         for v, g in zip(self.model.arch_parameters(), dalpha):
             if v.grad is None:
-                v.grad = Variable(g.data)
+                v.grad = g.data
             else:
                 v.grad.data.copy_(g.data)
 
