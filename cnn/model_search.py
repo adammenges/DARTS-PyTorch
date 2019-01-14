@@ -132,6 +132,9 @@ class Cell(nn.Module):
 
 class Network(nn.Module):
 
+    """
+    stack number:layer of cells and then flatten to fed a linear layer
+    """
     def __init__(self, c, num_classes, layers, criterion, steps=4, multiplier=4, stem_multiplier=3):
         """
 
@@ -190,7 +193,22 @@ class Network(nn.Module):
         # it indicates the input channel number
         self.classifier = nn.Linear(cp, num_classes)
 
-        self._initialize_alphas()
+        # k is the total number of edges inside single cell
+        k = sum(1 for i in range(self.steps) for j in range(2 + i))
+        num_ops = len(PRIMITIVES)
+
+        # it has num k of alpha parameters, and each alpha shape: [num_ops]
+        # it requires grad and can be converted to cpu/gpu automatically
+        self.alpha_normal = nn.Parameter(torch.randn(k, num_ops))
+        self.alpha_reduce = nn.Parameter(torch.randn(k, num_ops))
+        with torch.no_grad():
+            # initialize to smaller value
+            self.alpha_normal.mul_(1e-3)
+            self.alpha_reduce.mul_(1e-3)
+        self._arch_parameters = [
+            self.alpha_normal,
+            self.alpha_reduce,
+        ]
 
     def new(self):
         """
@@ -209,46 +227,37 @@ class Network(nn.Module):
         :param x:
         :return:
         """
+        # s0 & s1 means the last cells' output
         s0 = s1 = self.stem(x) # [b, 3, 32, 32] => [b, 48, 32, 32]
 
         for i, cell in enumerate(self.cells):
             # weights are shared across all reduction cell or normal cell
+            # according to current cell's type, it choose which architecture parameters
+            # to use
             if cell.reduction: # if current cell is reduction cell
                 weights = F.softmax(self.alphas_reduce, dim=-1)
             else:
                 weights = F.softmax(self.alphas_normal, dim=-1) # [14, 8]
+            # execute cell() firstly and then assign s0=s1, s1=result
             s0, s1 = s1, cell(s0, s1, weights) # [40, 64, 32, 32]
 
+        # s1 is the last cell's output
         out = self.global_pooling(s1)
         logits = self.classifier(out.view(out.size(0), -1))
 
         return logits
 
-    def _loss(self, input, target):
+    def loss(self, x, target):
         """
 
-        :param input:
+        :param x:
         :param target:
         :return:
         """
-        logits = self(input)
-        return self._criterion(logits, target)
+        logits = self(x)
+        return self.criterion(logits, target)
 
-    def _initialize_alphas(self):
-        """
 
-        :return:
-        """
-        # k is the total number of edges inside single cell
-        k = sum(1 for i in range(self._steps) for n in range(2 + i))
-        num_ops = len(PRIMITIVES)
-
-        self.alphas_normal = Variable(1e-3 * torch.randn(k, num_ops).cuda(), requires_grad=True)
-        self.alphas_reduce = Variable(1e-3 * torch.randn(k, num_ops).cuda(), requires_grad=True)
-        self._arch_parameters = [
-            self.alphas_normal,
-            self.alphas_reduce,
-        ]
 
     def arch_parameters(self):
         return self._arch_parameters
@@ -265,7 +274,7 @@ class Network(nn.Module):
             gene = []
             n = 2
             start = 0
-            for i in range(self._steps):
+            for i in range(self.steps):
                 end = start + n
                 W = weights[start:end].copy()
                 edges = sorted(range(i + 2),
@@ -282,10 +291,10 @@ class Network(nn.Module):
                 n += 1
             return gene
 
-        gene_normal = _parse(F.softmax(self.alphas_normal, dim=-1).data.cpu().numpy())
-        gene_reduce = _parse(F.softmax(self.alphas_reduce, dim=-1).data.cpu().numpy())
+        gene_normal = _parse(F.softmax(self.alpha_normal, dim=-1).data.cpu().numpy())
+        gene_reduce = _parse(F.softmax(self.alpha_reduce, dim=-1).data.cpu().numpy())
 
-        concat = range(2 + self._steps - self._multiplier, self._steps + 2)
+        concat = range(2 + self.steps - self.multiplier, self.steps + 2)
         genotype = Genotype(
             normal=gene_normal, normal_concat=concat,
             reduce=gene_reduce, reduce_concat=concat

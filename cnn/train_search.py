@@ -12,7 +12,7 @@ import  torchvision.datasets as dset
 import  torch.backends.cudnn as cudnn
 
 from    model_search import Network
-from    architect import Architect
+from    arch import Arch
 
 
 
@@ -48,7 +48,7 @@ args = parser.parse_args()
 log_format = '%(asctime)s %(message)s'
 logging.basicConfig(stream=sys.stdout, level=logging.INFO,
                     format=log_format, datefmt='%m/%d %I:%M:%S %p')
-fh = logging.FileHandler(os.path.join(args.save, 'log.txt'))
+fh = logging.FileHandler(os.path.join(args.exp_path, 'log.txt'))
 fh.setFormatter(logging.Formatter(log_format))
 logging.getLogger().addHandler(fh)
 
@@ -96,7 +96,7 @@ def main():
     scheduler = optim.lr_scheduler.CosineAnnealingLR(
                     optimizer, float(args.epochs), eta_min=args.lr_min)
 
-    arch = Architect(model, args)
+    arch = Arch(model, args)
 
     for epoch in range(args.epochs):
 
