@@ -5,7 +5,7 @@ import  shutil
 import  torchvision.transforms as transforms
 
 
-class AvgrageMeter(object):
+class AverageMeter:
 
     def __init__(self):
         self.reset()
@@ -36,7 +36,7 @@ def accuracy(output, target, topk=(1,)):
     return res
 
 
-class Cutout(object):
+class Cutout:
     def __init__(self, length):
         self.length = length
 
@@ -59,6 +59,11 @@ class Cutout(object):
 
 
 def _data_transforms_cifar10(args):
+    """
+
+    :param args:
+    :return:
+    """
     CIFAR_MEAN = [0.49139968, 0.48215827, 0.44653124]
     CIFAR_STD = [0.24703233, 0.24348505, 0.26158768]
 
@@ -79,7 +84,7 @@ def _data_transforms_cifar10(args):
 
 
 def count_parameters_in_MB(model):
-    return np.sum(np.prod(v.size()) for name, v in model.named_parameters() if "auxiliary" not in name) / 1e6
+    return np.sum(v.numel() for name, v in model.named_parameters() if "auxiliary" not in name) / 1e6
 
 
 def save_checkpoint(state, is_best, save):

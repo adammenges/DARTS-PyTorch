@@ -1,14 +1,9 @@
 import  torch
 import  numpy as np
-import  torch.nn as nn
+from    torch import optim
 
 
-
-
-
-
-
-def _concat(xs):
+def concat(xs):
     """
     flatten all tensor from [d1,d2,...dn] to [d]
     and then concat all [d_1] to [d_1+d_2+d_3+...]
@@ -20,23 +15,32 @@ def _concat(xs):
 
 
 
-class Architect:
+class Arch:
 
     def __init__(self, model, args):
         """
 
-        :param model:
+        :param model: network
         :param args:
         """
-        self.network_momentum = args.momentum
-        self.network_weight_decay = args.weight_decay
+        self.momentum = args.momentum
+        self.wd = args.wd
         self.model = model
-        self.optimizer = torch.optim.Adam(self.model.arch_parameters(),
-                                          lr=args.arch_learning_rate,
+        # this is the optimizer to optimize alpha parameter
+        self.optimizer = optim.Adam(self.model.arch_parameters(),
+                                          lr=args.arch_lr,
                                           betas=(0.5, 0.999),
-                                          weight_decay=args.arch_weight_decay)
+                                          weight_decay=args.arch_wd)
 
-    def _compute_unrolled_model(self, input, target, eta, network_optimizer):
+    def comp_unrolled_model(self, x, target, eta, optimizer):
+        """
+
+        :param x:
+        :param target:
+        :param eta:
+        :param optimizer:
+        :return:
+        """
 
         loss = self.model._loss(input, target)
         theta = _concat(self.model.parameters()).data

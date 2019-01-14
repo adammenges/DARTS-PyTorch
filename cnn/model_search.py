@@ -1,25 +1,25 @@
+import  torch
+from    torch import nn
 import  torch.nn.functional as F
-from    operations import *
-from    torch.autograd import Variable
-from    genotypes import PRIMITIVES
-from    genotypes import Genotype
+from    operations import OPS, FactorizedReduce, ReLUConvBN
+from    genotypes import PRIMITIVES, Genotype
 
 
-class MixedOp(nn.Module):
+class MixedLayer(nn.Module):
     """
     a mixtures output of 8 type of units.
     we use weights to aggregate these outputs while training.
     and softmax to select the strongest edges while inference.
     """
-    def __init__(self, C, stride):
+    def __init__(self, c, stride):
         """
 
-        :param C: 16
+        :param c: 16
         :param stride: 1
         """
-        super(MixedOp, self).__init__()
+        super(MixedLayer, self).__init__()
 
-        self._ops = nn.ModuleList()
+        self.layers = nn.ModuleList()
         """
         PRIMITIVES = [
                     'none',
@@ -34,14 +34,13 @@ class MixedOp(nn.Module):
         """
         for primitive in PRIMITIVES:
             # create corresponding layer
-            # [c] => [c], channels untouched.
-            op = OPS[primitive](C, stride, False)
+            layer = OPS[primitive](c, stride, False)
             # append batchnorm after pool layer
             if 'pool' in primitive:
                 # disable affine w/b for batchnorm
-                op = nn.Sequential(op, nn.BatchNorm2d(C, affine=False))
+                layer = nn.Sequential(layer, nn.BatchNorm2d(c, affine=False))
 
-            self._ops.append(op)
+            self.layers.append(layer)
 
     def forward(self, x, weights):
         """
@@ -50,7 +49,11 @@ class MixedOp(nn.Module):
         :param weights: alpha, the output = sum of alpha * op(x)
         :return:
         """
-        return sum(w * op(x) for w, op in zip(weights, self._ops))
+        res = [w * layer(x) for w, layer in zip(weights, self.layers)]
+        # element-wise add by torch.add
+        res = sum(res)
+        return res
+
 
 
 
@@ -59,41 +62,44 @@ class MixedOp(nn.Module):
 
 class Cell(nn.Module):
 
-    def __init__(self, steps, multiplier, C_prev_prev, C_prev, C, reduction, reduction_prev):
+    def __init__(self, steps, multiplier, cpp, cp, c, reduction, reduction_prev):
         """
 
-        :param steps: 4
+        :param steps: 4, number of layers inside a cell
         :param multiplier: 4
-        :param C_prev_prev: 48f
-        :param C_prev: 48
-        :param C: 16
+        :param cpp: 48
+        :param cp: 48
+        :param c: 16
         :param reduction: False
         :param reduction_prev: False
         """
         super(Cell, self).__init__()
 
-
+        # indicating current cell is reduction or not
         self.reduction = reduction
 
         # preprocess0 deal with output from prev_prev cell
         if reduction_prev:
-            self.preprocess0 = FactorizedReduce(C_prev_prev, C, affine=False)
+            self.preprocess0 = FactorizedReduce(cpp, c, affine=False)
         else:
-            self.preprocess0 = ReLUConvBN(C_prev_prev, C, 1, 1, 0, affine=False)
+            self.preprocess0 = ReLUConvBN(cpp, c, 1, 1, 0, affine=False)
         # preprocess1 deal with output from prev cell
-        self.preprocess1 = ReLUConvBN(C_prev, C, 1, 1, 0, affine=False)
-        self._steps = steps # 4
-        self._multiplier = multiplier # 4
+        self.preprocess1 = ReLUConvBN(cp, c, 1, 1, 0, affine=False)
 
-        self._ops = nn.ModuleList()
-        self._bns = nn.ModuleList()
-        for i in range(self._steps):
+        # steps inside a cell
+        self.steps = steps # 4
+        self.multiplier = multiplier # 4
+
+        self.layers = nn.ModuleList()
+        # self.bns = nn.ModuleList()
+
+        for i in range(self.steps):
+            # for each i inside cell, it connects with all previous output
+            # plus previous two cells' output
             for j in range(2 + i):
-                # every intermediate node will connect its input and previous cell output and
-                # prev_prev cell output
                 stride = 2 if reduction and j < 2 else 1
-                op = MixedOp(C, stride)
-                self._ops.append(op)
+                layer = MixedLayer(c, stride)
+                self.layers.append(layer)
 
     def forward(self, s0, s1, weights):
         """
@@ -109,14 +115,15 @@ class Cell(nn.Module):
         states = [s0, s1]
         offset = 0
         # for each node, receive input from all previous intermediate nodes and s0, s1
-        for i in range(self._steps): # 4
+        for i in range(self.steps): # 4
             # [40, 16, 32, 32]
-            # equal to: t1 + t2 + ... + tn
-            s = sum(self._ops[offset + j](h, weights[offset + j]) for j, h in enumerate(states))
+            s = sum(self.layers[offset + j](h, weights[offset + j]) for j, h in enumerate(states))
             offset += len(states)
+            # append one state since s is the elem-wise addition of all output
             states.append(s)
 
-        return torch.cat(states[-self._multiplier:], dim=1) # 6 of [40, 16, 32, 32]
+        # concat along dim=channel
+        return torch.cat(states[-self.multiplier:], dim=1) # 6 of [40, 16, 32, 32]
 
 
 
@@ -125,7 +132,7 @@ class Cell(nn.Module):
 
 class Network(nn.Module):
 
-    def __init__(self, C, num_classes, layers, criterion, steps=4, multiplier=4, stem_multiplier=3):
+    def __init__(self, c, num_classes, layers, criterion, steps=4, multiplier=4, stem_multiplier=3):
         """
 
         :param C: 16
@@ -138,53 +145,72 @@ class Network(nn.Module):
         """
         super(Network, self).__init__()
 
-        self._C = C
-        self._num_classes = num_classes
-        self._layers = layers
-        self._criterion = criterion
-        self._steps = steps
-        self._multiplier = multiplier
+        self.c = c
+        self.num_classes = num_classes
+        self.layers = layers
+        self.criterion = criterion
+        self.steps = steps
+        self.multiplier = multiplier
 
-        C_curr = stem_multiplier * C # 48
+
+        # stem_multiplier is for stem network,
+        # and multiplier is for general cell
+        c_curr = stem_multiplier * c # 3*16
+        # stem network, convert 3 channel to c_curr
         self.stem = nn.Sequential( # 3 => 48
-            nn.Conv2d(3, C_curr, 3, padding=1, bias=False),
-            nn.BatchNorm2d(C_curr)
+            nn.Conv2d(3, c_curr, 3, padding=1, bias=False),
+            nn.BatchNorm2d(c_curr)
         )
 
-        C_prev_prev, C_prev, C_curr = C_curr, C_curr, C # 48, 48, 16
+        # c_curr means a factor of the output channels of current cell
+        # output channels = multiplier * c_curr
+        cpp, cp, c_curr = c_curr, c_curr, c # 48, 48, 16
         self.cells = nn.ModuleList()
         reduction_prev = False
         for i in range(layers):
+
             # for layer in the middle [1/3, 2/3], reduce via stride=2
             if i in [layers // 3, 2 * layers // 3]:
-                C_curr *= 2
+                c_curr *= 2
                 reduction = True
             else:
                 reduction = False
 
-            cell = Cell(steps, multiplier, C_prev_prev, C_prev, C_curr, reduction, reduction_prev)
+            # the output channels = multiplier * c_curr
+            cell = Cell(steps, multiplier, cpp, cp, c_curr, reduction, reduction_prev)
+            # update reduction_prev
             reduction_prev = reduction
+
             self.cells += [cell]
-            C_prev_prev, C_prev = C_prev, multiplier * C_curr
+
+            cpp, cp = cp, multiplier * c_curr
 
         self.global_pooling = nn.AdaptiveAvgPool2d(1)
-        self.classifier = nn.Linear(C_prev, num_classes)
+        # since cp records last cell's output channels
+        # it indicates the input channel number
+        self.classifier = nn.Linear(cp, num_classes)
 
         self._initialize_alphas()
 
     def new(self):
-        model_new = Network(self._C, self._num_classes, self._layers, self._criterion).cuda()
+        """
+        create a new model and initialize it with current alpha parameters.
+        However, its weights are left untouched.
+        :return:
+        """
+        model_new = Network(self.c, self.num_classes, self.layers, self.criterion).cuda()
         for x, y in zip(model_new.arch_parameters(), self.arch_parameters()):
             x.data.copy_(y.data)
         return model_new
 
-    def forward(self, input):
+    def forward(self, x):
         """
 
-        :param input:
+        :param x:
         :return:
         """
-        s0 = s1 = self.stem(input) # [b, 3, 32, 32], [b, 48, 32, 32]
+        s0 = s1 = self.stem(x) # [b, 3, 32, 32] => [b, 48, 32, 32]
+
         for i, cell in enumerate(self.cells):
             # weights are shared across all reduction cell or normal cell
             if cell.reduction: # if current cell is reduction cell
