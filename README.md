@@ -1,3 +1,12 @@
+
+## PyTorch 0.4.0 ~ 1.0.0 supported
+
+```python
+cd cnn
+python train_search.py
+```
+
+
 # Differentiable Architecture Search
 Code accompanying the paper
 > [DARTS: Differentiable Architecture Search](https://arxiv.org/abs/1806.09055)\
