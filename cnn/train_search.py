@@ -44,7 +44,7 @@ args = parser.parse_args()
 
 args.save = 'search-{}-{}'.format(args.save, time.strftime("%Y%m%d-%H%M%S"))
 args.save = 'exp'
-utils.create_exp_dir(args.save, scripts_to_save=None) #glob.glob('*.py'))
+utils.create_exp_dir(args.save, scripts_to_save=None) # glob.glob('*.py'))
 
 log_format = '%(asctime)s %(message)s'
 logging.basicConfig(stream=sys.stdout, level=logging.INFO,
@@ -138,7 +138,6 @@ def train(train_queue, valid_queue, model, architect, criterion, optimizer, lr):
 
         input = Variable(input, requires_grad=False).cuda()
         target = Variable(target, requires_grad=False).cuda(async=True)
-
         # get a random minibatch from the search queue with replacement
         input_search, target_search = next(iter(valid_queue)) # [b, 3, 32, 32], [b]
         input_search = Variable(input_search, requires_grad=False).cuda()
@@ -149,7 +148,6 @@ def train(train_queue, valid_queue, model, architect, criterion, optimizer, lr):
         optimizer.zero_grad()
         logits = model(input)
         loss = criterion(logits, target)
-
         loss.backward()
         nn.utils.clip_grad_norm(model.parameters(), args.grad_clip)
         optimizer.step()

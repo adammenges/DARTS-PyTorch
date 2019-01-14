@@ -64,7 +64,7 @@ class Cell(nn.Module):
 
         :param steps: 4
         :param multiplier: 4
-        :param C_prev_prev: 48
+        :param C_prev_prev: 48f
         :param C_prev: 48
         :param C: 16
         :param reduction: False

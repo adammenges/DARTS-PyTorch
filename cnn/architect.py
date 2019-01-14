@@ -48,7 +48,9 @@ class Architect:
                 .mul_(self.network_momentum)
         except:
             moment = torch.zeros_like(theta)
-        dtheta = _concat(torch.autograd.grad(loss, self.model.parameters())).data + self.network_weight_decay * theta
+        dtheta = _concat(torch.autograd.grad(loss, self.model.parameters())).data
+        dtheta = dtheta + self.network_weight_decay * theta
+        # theta = theta - eta * (moment + dtheta)
         unrolled_model = self._construct_model_from_theta(theta.sub(eta, moment + dtheta))
         return unrolled_model
 
