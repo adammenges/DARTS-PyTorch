@@ -108,7 +108,7 @@ class Arch:
         unrolled_loss.backward()
         dalpha = [v.grad for v in unrolled_model.arch_parameters()]
         vector = [v.grad.data for v in unrolled_model.parameters()]
-        implicit_grads = self._hessian_vector_product(vector, x_train, target_train)
+        implicit_grads = self.hessian_vector_product(vector, x_train, target_train)
 
         for g, ig in zip(dalpha, implicit_grads):
             # g = g - eta * ig
@@ -141,19 +141,36 @@ class Arch:
         model_new.load_state_dict(model_dict)
         return model_new.cuda()
 
-    def _hessian_vector_product(self, vector, input, target, r=1e-2):
+    def hessian_vector_product(self, vector, x, target, r=1e-2):
+        """
+
+        :param vector: gradient.data of parameters theta
+        :param x:
+        :param target:
+        :param r:
+        :return:
+        """
         R = r / concat(vector).norm()
-        for p, v in zip(self.model.parameters(), vector):
-            p.data.add_(R, v)
-        loss = self.model.loss(input, target)
-        grads_p = torch.autograd.grad(loss, self.model.arch_parameters())
 
         for p, v in zip(self.model.parameters(), vector):
+            # w+ = w + R * v
+            p.data.add_(R, v)
+        loss = self.model.loss(x, target)
+        # gradient with respect to alpha
+        grads_p = autograd.grad(loss, self.model.arch_parameters())
+
+
+        for p, v in zip(self.model.parameters(), vector):
+            # w- = (w+R*v) - 2R*v
             p.data.sub_(2 * R, v)
-        loss = self.model.loss(input, target)
-        grads_n = torch.autograd.grad(loss, self.model.arch_parameters())
+        loss = self.model.loss(x, target)
+        grads_n = autograd.grad(loss, self.model.arch_parameters())
 
         for p, v in zip(self.model.parameters(), vector):
+            # w = (w+R*v) - 2R*v + R*v
             p.data.add_(R, v)
 
-        return [(x - y).div_(2 * R) for x, y in zip(grads_p, grads_n)]
+        h= [(x - y).div_(2 * R) for x, y in zip(grads_p, grads_n)]
+        # h len: 2 h0 torch.Size([14, 8])
+        # print('h len:', len(h), 'h0', h[0].shape)
+        return h

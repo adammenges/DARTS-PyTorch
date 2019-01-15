@@ -5,7 +5,8 @@ import  torch.nn as nn
 
 
 
-# re-build construction function with same API.
+
+# OPS is a set of layers with same input/output channel.
 
 OPS = {
     'none':         lambda C, stride, affine: Zero(stride),

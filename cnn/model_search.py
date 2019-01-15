@@ -138,13 +138,13 @@ class Network(nn.Module):
     def __init__(self, c, num_classes, layers, criterion, steps=4, multiplier=4, stem_multiplier=3):
         """
 
-        :param C: 16
+        :param c: 16
         :param num_classes: 10
-        :param layers: 8
+        :param layers: number of cells of current network
         :param criterion:
-        :param steps: 4
-        :param multiplier: 4
-        :param stem_multiplier: 3
+        :param steps: nodes num inside cell
+        :param multiplier: output channel of cell = multiplier * ch
+        :param stem_multiplier: output channel of stem net = stem_multiplier * ch
         """
         super(Network, self).__init__()
 
