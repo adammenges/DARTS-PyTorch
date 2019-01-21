@@ -20,7 +20,7 @@ from    arch import Arch
 
 parser = argparse.ArgumentParser("cifar")
 parser.add_argument('--data', type=str, default='../data', help='location of the data corpus')
-parser.add_argument('--batchsz', type=int, default=16, help='batch size')
+parser.add_argument('--batchsz', type=int, default=32, help='batch size')
 parser.add_argument('--lr', type=float, default=0.025, help='init learning rate')
 parser.add_argument('--lr_min', type=float, default=0.001, help='min learning rate')
 parser.add_argument('--momentum', type=float, default=0.9, help='momentum')
@@ -118,7 +118,7 @@ def main():
         valid_acc, valid_obj = infer(valid_queue, model, criterion)
         logging.info('valid acc: %f', valid_acc)
 
-        utils.save(model, os.path.join(args.save, 'weights.pt'))
+        utils.save(model, os.path.join(args.exp_path, 'weights.pt'))
 
 
 def train(train_queue, valid_queue, model, arch, criterion, optimizer, lr):
