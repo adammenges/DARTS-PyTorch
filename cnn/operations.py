@@ -65,8 +65,8 @@ class DilConv(nn.Module):
         :param C_out:
         :param kernel_size:
         :param stride:
-        :param padding:
-        :param dilation:
+        :param padding: 2/4
+        :param dilation: 2
         :param affine:
         """
         super(DilConv, self).__init__()
@@ -85,7 +85,9 @@ class DilConv(nn.Module):
 
 
 class SepConv(nn.Module):
-
+    """
+    implemented seprate convolution via pytorch groups parameters
+    """
     def __init__(self, C_in, C_out, kernel_size, stride, padding, affine=True):
         """
 
@@ -93,7 +95,7 @@ class SepConv(nn.Module):
         :param C_out:
         :param kernel_size:
         :param stride:
-        :param padding:
+        :param padding: 1/2
         :param affine:
         """
         super(SepConv, self).__init__()

@@ -8,6 +8,7 @@ from    genotypes import PRIMITIVES, Genotype
 class MixedLayer(nn.Module):
     """
     a mixtures output of 8 type of units.
+
     we use weights to aggregate these outputs while training.
     and softmax to select the strongest edges while inference.
     """
@@ -197,6 +198,8 @@ class Network(nn.Module):
         k = sum(1 for i in range(self.steps) for j in range(2 + i))
         num_ops = len(PRIMITIVES)
 
+        # TODO
+        # this kind of implementation will add alpha into self.parameters()
         # it has num k of alpha parameters, and each alpha shape: [num_ops]
         # it requires grad and can be converted to cpu/gpu automatically
         self.alpha_normal = nn.Parameter(torch.randn(k, num_ops))
@@ -271,10 +274,15 @@ class Network(nn.Module):
         :return:
         """
         def _parse(weights):
+            """
+
+            :param weights: [14, 8]
+            :return:
+            """
             gene = []
             n = 2
             start = 0
-            for i in range(self.steps):
+            for i in range(self.steps): # for each node
                 end = start + n
                 W = weights[start:end].copy()
                 edges = sorted(range(i + 2),

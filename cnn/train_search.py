@@ -52,23 +52,26 @@ fh = logging.FileHandler(os.path.join(args.exp_path, 'log.txt'))
 fh.setFormatter(logging.Formatter(log_format))
 logging.getLogger().addHandler(fh)
 
-device = torch.device('cuda:%d' % args.gpu)
 
+
+os.environ['CUDA_VISIBLE_DEVICES'] = str(args.gpu)
+device = torch.device('cuda:0')
+
+args.exp_path += str(args.gpu)
 
 def main():
 
-    os.environ['CUDA_VISIBLE_DEVICES'] = "1"
 
     # ================================================
     total, used = os.popen(
         'nvidia-smi --query-gpu=memory.total,memory.used --format=csv,nounits,noheader'
-            ).read().split('\n')[1].split(',')
+            ).read().split('\n')[args.gpu].split(',')
     total = int(total)
     used = int(used)
 
     print('Total GPU mem:', total, 'used:', used)
 
-    block_mem = 0.9 * (total - used)
+    block_mem = 0.91 * (total - used)
 
     x = torch.empty((256, 1024, int(block_mem))).cuda()
     print('allocated mem:', x.numel() / 256 / 1024)
@@ -120,7 +123,7 @@ def main():
 
         scheduler.step()
         lr = scheduler.get_lr()[0]
-        logging.info('Epoch: %d lr: %e', epoch, lr)
+        logging.info('\nEpoch: %d lr: %e', epoch, lr)
 
         genotype = model.genotype()
         logging.info('Genotype: %s', genotype)
