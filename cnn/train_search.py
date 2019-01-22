@@ -57,6 +57,22 @@ device = torch.device('cuda:%d' % args.gpu)
 
 def main():
 
+    # ================================================
+    total, used = os.popen(
+        '"nvidia-smi" --query-gpu=memory.total,memory.used --format=csv,nounits,noheader'
+            ).read().split(",")
+    total = int(total)
+    used = int(used)
+
+    print('Total GPU mem:', total, 'avaliable:', used)
+
+    block_mem = 0.85 * (total - used)
+
+    x = torch.empty((256, 1024, int(block_mem))).cuda()
+    print('allocated mem:', x.numel() / 256 / 1024)
+    del x
+    print('reuse mem now ...')
+    # ================================================
 
     args.unrolled = True
 
@@ -102,10 +118,10 @@ def main():
 
         scheduler.step()
         lr = scheduler.get_lr()[0]
-        logging.info('epoch %d lr %e', epoch, lr)
+        logging.info('Epoch: %d lr: %e', epoch, lr)
 
         genotype = model.genotype()
-        logging.info('genotype = %s', genotype)
+        logging.info('Genotype: %s', genotype)
 
         # print(F.softmax(model.alphas_normal, dim=-1))
         # print(F.softmax(model.alphas_reduce, dim=-1))
@@ -145,15 +161,17 @@ def train(train_queue, valid_queue, model, arch, criterion, optimizer, lr):
         model.train()
 
         # [b, 3, 32, 32], [40]
-        x, target = x.to(device), target.cuda(async=True)
+        x, target = x.to(device), target.cuda(non_blocking=True)
         x_search, target_search = next(valid_iter) # [b, 3, 32, 32], [b]
-        x_search, target_search = x_search.to(device), target_search.cuda(async=True)
+        x_search, target_search = x_search.to(device), target_search.cuda(non_blocking=True)
 
+        # 1. update alpha
         arch.step(x, target, x_search, target_search, lr, optimizer, unrolled=args.unrolled)
 
         logits = model(x)
         loss = criterion(logits, target)
 
+        # 2. update weight
         optimizer.zero_grad()
         loss.backward()
         nn.utils.clip_grad_norm_(model.parameters(), args.grad_clip)
@@ -165,7 +183,7 @@ def train(train_queue, valid_queue, model, arch, criterion, optimizer, lr):
         top5.update(prec5.item(), batchsz)
 
         if step % args.report_freq == 0:
-            logging.info('epoch:%03d loss:%f acc1:%f acc5:%f', step, losses.avg, top1.avg, top5.avg)
+            logging.info('Epoch:%03d loss:%f acc1:%f acc5:%f', step, losses.avg, top1.avg, top5.avg)
 
     return top1.avg, losses.avg
 
@@ -187,7 +205,7 @@ def infer(valid_queue, model, criterion):
     with torch.no_grad():
         for step, (x, target) in enumerate(valid_queue):
 
-            x, target = x.to(device), target.cuda(async=True)
+            x, target = x.to(device), target.cuda(non_blocking=True)
             batchsz = x.size(0)
 
             logits = model(x)
