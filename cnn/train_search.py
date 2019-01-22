@@ -57,16 +57,18 @@ device = torch.device('cuda:%d' % args.gpu)
 
 def main():
 
+    os.environ['CUDA_VISIBLE_DEVICES'] = "1"
+
     # ================================================
     total, used = os.popen(
-        '"nvidia-smi" --query-gpu=memory.total,memory.used --format=csv,nounits,noheader'
-            ).read().split(",")
+        'nvidia-smi --query-gpu=memory.total,memory.used --format=csv,nounits,noheader'
+            ).read().split('\n')[1].split(',')
     total = int(total)
     used = int(used)
 
-    print('Total GPU mem:', total, 'avaliable:', used)
+    print('Total GPU mem:', total, 'used:', used)
 
-    block_mem = 0.85 * (total - used)
+    block_mem = 0.9 * (total - used)
 
     x = torch.empty((256, 1024, int(block_mem))).cuda()
     print('allocated mem:', x.numel() / 256 / 1024)
@@ -183,7 +185,7 @@ def train(train_queue, valid_queue, model, arch, criterion, optimizer, lr):
         top5.update(prec5.item(), batchsz)
 
         if step % args.report_freq == 0:
-            logging.info('Epoch:%03d loss:%f acc1:%f acc5:%f', step, losses.avg, top1.avg, top5.avg)
+            logging.info('Step:%03d loss:%f acc1:%f acc5:%f', step, losses.avg, top1.avg, top5.avg)
 
     return top1.avg, losses.avg
 
@@ -217,7 +219,7 @@ def infer(valid_queue, model, criterion):
             top5.update(prec5.item(), batchsz)
 
             if step % args.report_freq == 0:
-                logging.info('>>Validaton: %03d %e %f %f', step, losses.avg, top1.avg, top5.avg)
+                logging.info('>> Validation: %3d %e %f %f', step, losses.avg, top1.avg, top5.avg)
 
     return top1.avg, losses.avg
 

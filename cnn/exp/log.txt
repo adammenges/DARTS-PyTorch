@@ -460,3 +460,69 @@
 2019-01-22 14:50:33,563 Epoch: 3 lr: 2.478745e-02
 2019-01-22 14:50:33,568 Genotype: Genotype(normal=[('max_pool_3x3', 0), ('sep_conv_5x5', 1), ('max_pool_3x3', 0), ('sep_conv_5x5', 2), ('sep_conv_5x5', 1), ('max_pool_3x3', 0), ('sep_conv_5x5', 1), ('sep_conv_5x5', 3)], normal_concat=range(2, 6), reduce=[('max_pool_3x3', 0), ('sep_conv_3x3', 1), ('max_pool_3x3', 0), ('dil_conv_5x5', 2), ('dil_conv_5x5', 3), ('sep_conv_5x5', 1), ('sep_conv_5x5', 2), ('dil_conv_5x5', 3)], reduce_concat=range(2, 6))
 2019-01-22 14:50:46,871 Epoch:000 loss:0.891796 acc1:68.292686 acc5:97.560974
+2019-01-22 15:01:36,258 Epoch:050 loss:0.841197 acc1:70.396941 acc5:97.776184
+2019-01-22 15:12:12,849 Epoch:100 loss:0.827805 acc1:70.912825 acc5:97.899059
+2019-01-22 15:22:32,553 Epoch:150 loss:0.829914 acc1:70.586337 acc5:98.005169
+2019-01-22 15:28:24,191 GPU device = 0
+2019-01-22 15:28:24,191 args = Namespace(arch_lr=0.0003, arch_wd=0.001, batchsz=88, cutout=False, cutout_len=16, data='../data', drop_path_prob=0.3, epochs=50, exp_path='exp', gpu=0, grad_clip=5, init_ch=16, layers=8, lr=0.025, lr_min=0.001, model_path='saved_models', momentum=0.9, report_freq=50, seed=2, train_portion=0.5, unrolled=True, wd=0.0003)
+2019-01-22 15:28:24,491 Total param size = 1.930842 MB
+2019-01-22 15:28:25,401 Epoch: 0 lr: 2.500000e-02
+2019-01-22 15:28:25,402 Genotype: Genotype(normal=[('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('dil_conv_3x3', 1), ('dil_conv_5x5', 2), ('max_pool_3x3', 1), ('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('avg_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('avg_pool_3x3', 1), ('avg_pool_3x3', 0), ('sep_conv_3x3', 1), ('dil_conv_5x5', 2), ('sep_conv_3x3', 2), ('avg_pool_3x3', 3), ('max_pool_3x3', 4), ('dil_conv_5x5', 0)], reduce_concat=range(2, 6))
+2019-01-22 15:28:33,877 Epoch:000 loss:2.338101 acc1:10.227273 acc5:54.545456
+2019-01-22 15:28:58,714 Epoch:200 loss:0.823286 acc1:70.822718 acc5:97.937144
+2019-01-22 15:30:22,385 GPU device = 0
+2019-01-22 15:30:22,385 args = Namespace(arch_lr=0.0003, arch_wd=0.001, batchsz=88, cutout=False, cutout_len=16, data='../data', drop_path_prob=0.3, epochs=50, exp_path='exp', gpu=0, grad_clip=5, init_ch=16, layers=8, lr=0.025, lr_min=0.001, model_path='saved_models', momentum=0.9, report_freq=50, seed=2, train_portion=0.5, unrolled=True, wd=0.0003)
+2019-01-22 15:30:22,719 Total param size = 1.930842 MB
+2019-01-22 15:30:23,646 Epoch: 0 lr: 2.500000e-02
+2019-01-22 15:30:23,647 Genotype: Genotype(normal=[('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('dil_conv_3x3', 1), ('dil_conv_5x5', 2), ('max_pool_3x3', 1), ('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('avg_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('avg_pool_3x3', 1), ('avg_pool_3x3', 0), ('sep_conv_3x3', 1), ('dil_conv_5x5', 2), ('sep_conv_3x3', 2), ('avg_pool_3x3', 3), ('max_pool_3x3', 4), ('dil_conv_5x5', 0)], reduce_concat=range(2, 6))
+2019-01-22 15:30:32,275 Epoch:000 loss:2.338104 acc1:10.227273 acc5:54.545456
+2019-01-22 15:35:32,182 Epoch:250 loss:0.818632 acc1:71.047519 acc5:97.978817
+2019-01-22 15:37:12,131 Epoch:050 loss:1.912614 acc1:27.740641 acc5:81.862744
+2019-01-22 15:42:03,284 Epoch:300 loss:0.815967 acc1:71.051780 acc5:98.006645
+2019-01-22 15:42:34,281 train acc: 71.080002
+2019-01-22 15:42:34,619 >>Validaton: 000 1.075060e+00 59.756100 96.341469
+2019-01-22 15:42:45,730 >>Validaton: 050 8.749711e-01 69.273077 97.537065
+2019-01-22 15:42:56,842 >>Validaton: 100 8.747899e-01 69.632941 97.512679
+2019-01-22 15:43:07,958 >>Validaton: 150 8.779522e-01 69.827170 97.488291
+2019-01-22 15:43:19,072 >>Validaton: 200 8.803493e-01 69.742751 97.476035
+2019-01-22 15:43:30,187 >>Validaton: 250 8.726094e-01 69.852300 97.468663
+2019-01-22 15:43:41,301 >>Validaton: 300 8.661401e-01 69.832268 97.560977
+2019-01-22 15:43:42,208 valid acc: 69.840002
+2019-01-22 15:43:42,534 Epoch: 4 lr: 2.462300e-02
+2019-01-22 15:43:42,535 Genotype: Genotype(normal=[('max_pool_3x3', 0), ('sep_conv_5x5', 1), ('max_pool_3x3', 0), ('sep_conv_5x5', 2), ('max_pool_3x3', 0), ('sep_conv_5x5', 1), ('sep_conv_5x5', 1), ('sep_conv_3x3', 0)], normal_concat=range(2, 6), reduce=[('max_pool_3x3', 0), ('sep_conv_3x3', 1), ('max_pool_3x3', 0), ('dil_conv_5x5', 2), ('dil_conv_5x5', 3), ('sep_conv_5x5', 1), ('sep_conv_5x5', 2), ('dil_conv_5x5', 4)], reduce_concat=range(2, 6))
+2019-01-22 15:43:49,247 Epoch:100 loss:1.791808 acc1:33.033303 acc5:85.036003
+2019-01-22 15:43:50,542 Epoch:000 loss:0.854564 acc1:65.853661 acc5:100.000000
+2019-01-22 15:50:21,086 Epoch:050 loss:0.731290 acc1:74.461982 acc5:98.493544
+2019-01-22 15:50:26,234 Epoch:150 loss:1.698363 acc1:36.634557 acc5:86.965682
+2019-01-22 15:56:52,657 Epoch:100 loss:0.732764 acc1:74.269502 acc5:98.285438
+2019-01-22 15:57:02,583 Epoch:200 loss:1.633657 acc1:39.196065 acc5:88.302803
+2019-01-22 16:03:21,412 Epoch:150 loss:0.729439 acc1:74.261026 acc5:98.336295
+2019-01-22 16:03:38,864 Epoch:250 loss:1.575155 acc1:41.542919 acc5:89.487504
+2019-01-22 16:08:06,653 train acc: 42.912000
+2019-01-22 16:08:07,010 >>Validaton: 000 1.294492e+00 55.681816 98.863632
+2019-01-22 16:08:18,819 >>Validaton: 050 1.419289e+00 48.908199 93.805703
+2019-01-22 16:08:30,630 >>Validaton: 100 1.430892e+00 48.863636 93.778127
+2019-01-22 16:08:42,445 >>Validaton: 150 1.426345e+00 48.886213 93.761288
+2019-01-22 16:08:54,272 >>Validaton: 200 1.431852e+00 48.824061 93.588873
+2019-01-22 16:09:06,100 >>Validaton: 250 1.435983e+00 48.836472 93.512314
+2019-01-22 16:09:14,141 valid acc: 49.016000
+2019-01-22 16:09:14,510 Epoch: 1 lr: 2.497632e-02
+2019-01-22 16:09:14,511 Genotype: Genotype(normal=[('max_pool_3x3', 0), ('dil_conv_5x5', 1), ('max_pool_3x3', 0), ('sep_conv_5x5', 1), ('sep_conv_3x3', 1), ('dil_conv_5x5', 3), ('dil_conv_3x3', 4), ('dil_conv_5x5', 1)], normal_concat=range(2, 6), reduce=[('max_pool_3x3', 0), ('max_pool_3x3', 1), ('sep_conv_5x5', 2), ('sep_conv_5x5', 1), ('dil_conv_5x5', 2), ('max_pool_3x3', 0), ('dil_conv_5x5', 2), ('dil_conv_5x5', 3)], reduce_concat=range(2, 6))
+2019-01-22 16:09:22,705 Epoch:000 loss:1.425657 acc1:53.409092 acc5:85.227272
+2019-01-22 16:09:50,545 Epoch:200 loss:0.734108 acc1:74.105086 acc5:98.343648
+2019-01-22 16:16:03,120 Epoch:050 loss:1.230253 acc1:55.013369 acc5:94.964350
+2019-01-22 16:16:18,505 Epoch:250 loss:0.730628 acc1:74.166749 acc5:98.328637
+2019-01-22 16:22:39,946 Epoch:100 loss:1.211411 acc1:55.861836 acc5:95.004501
+2019-01-22 16:22:46,443 Epoch:300 loss:0.721322 acc1:74.568513 acc5:98.387489
+2019-01-22 16:23:17,047 train acc: 74.628002
+2019-01-22 16:23:17,382 >>Validaton: 000 6.401184e-01 76.829269 100.000000
+2019-01-22 16:23:28,490 >>Validaton: 050 7.273030e-01 74.701101 98.182688
+2019-01-22 16:23:39,600 >>Validaton: 100 7.356592e-01 74.547212 98.043951
+2019-01-22 16:23:50,712 >>Validaton: 150 7.320100e-01 74.495236 98.069779
+2019-01-22 16:24:01,824 >>Validaton: 200 7.396596e-01 74.226430 98.125228
+2019-01-22 16:24:12,937 >>Validaton: 250 7.405704e-01 74.244487 98.124575
+2019-01-22 16:24:24,049 >>Validaton: 300 7.453108e-01 74.191720 98.095779
+2019-01-22 16:24:24,953 valid acc: 74.144001
+2019-01-22 16:24:25,326 Epoch: 5 lr: 2.441268e-02
+2019-01-22 16:24:25,327 Genotype: Genotype(normal=[('max_pool_3x3', 0), ('sep_conv_5x5', 1), ('max_pool_3x3', 0), ('sep_conv_5x5', 2), ('max_pool_3x3', 0), ('sep_conv_5x5', 1), ('sep_conv_5x5', 1), ('sep_conv_3x3', 0)], normal_concat=range(2, 6), reduce=[('max_pool_3x3', 0), ('sep_conv_3x3', 1), ('max_pool_3x3', 0), ('dil_conv_5x5', 2), ('sep_conv_3x3', 3), ('sep_conv_5x5', 1), ('sep_conv_5x5', 2), ('dil_conv_5x5', 4)], reduce_concat=range(2, 6))
+2019-01-22 16:24:33,291 Epoch:000 loss:0.723548 acc1:75.609756 acc5:97.560974

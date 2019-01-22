@@ -44,7 +44,7 @@ class Arch:
         # forward to get loss
         loss = self.model.loss(x, target)
         # flatten current weights
-        theta = concat(self.model.parameters()).data
+        theta = concat(self.model.parameters()).detach()
         # theta: torch.Size([1930618])
         # print('theta:', theta.shape)
         try:
@@ -56,11 +56,9 @@ class Arch:
 
         # flatten all gradients
         dtheta = concat(autograd.grad(loss, self.model.parameters())).data
-        # plus weight decay loss
-        dtheta = dtheta + self.wd * theta
         # indeed, here we implement a simple SGD with momentum and weight decay
-        # theta = theta - eta * (moment + dtheta)
-        theta = theta.sub(eta, moment + dtheta)
+        # theta = theta - eta * (moment + weight decay + dtheta)
+        theta = theta.sub(eta, moment + dtheta + self.wd * theta)
         # construct a new model
         unrolled_model = self.construct_model_from_theta(theta)
 
@@ -99,6 +97,8 @@ class Arch:
         :return:
         """
         loss = self.model.loss(x_valid, target_valid)
+        # both alpha and theta require grad but only alpha optimizer will
+        # step in current phase.
         loss.backward()
 
     def backward_step_unrolled(self, x_train, target_train, x_valid, target_valid, eta, optimizer):
@@ -108,25 +108,28 @@ class Arch:
         :param target_train:
         :param x_valid:
         :param target_valid:
-        :param eta:
-        :param optimizer:
+        :param eta: 0.01, according to author's comments
+        :param optimizer: theta optimizer
         :return:
         """
 
         # theta_pi = theta - lr * grad
         unrolled_model = self.comp_unrolled_model(x_train, target_train, eta, optimizer)
+        # calculate loss on theta_pi
         unrolled_loss = unrolled_model.loss(x_valid, target_valid)
 
-        # this will update theta_pi model, but not theta model
+        # this will update theta_pi model, but NOT theta model
         unrolled_loss.backward()
+        # grad(L(w', a), a), part of Eq. 6
         dalpha = [v.grad for v in unrolled_model.arch_parameters()]
         vector = [v.grad.data for v in unrolled_model.parameters()]
         implicit_grads = self.hessian_vector_product(vector, x_train, target_train)
 
         for g, ig in zip(dalpha, implicit_grads):
-            # g = g - eta * ig
+            # g = g - eta * ig, from Eq. 6
             g.data.sub_(eta, ig.data)
 
+        # write updated alpha into original model
         for v, g in zip(self.model.arch_parameters(), dalpha):
             if v.grad is None:
                 v.grad = g.data
@@ -136,6 +139,8 @@ class Arch:
     def construct_model_from_theta(self, theta):
         """
         construct a new model with initialized weight from theta
+        it use .state_dict() and load_state_dict() instead of
+        .parameters() + fill_()
         :param theta: flatten weights, need to reshape to original shape
         :return:
         """
@@ -156,7 +161,8 @@ class Arch:
 
     def hessian_vector_product(self, vector, x, target, r=1e-2):
         """
-
+        slightly touch vector value to estimate the gradient with respect to alpha
+        refer to Eq. 7 for more details.
         :param vector: gradient.data of parameters theta
         :param x:
         :param target:
