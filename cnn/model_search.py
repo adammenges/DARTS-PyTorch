@@ -115,12 +115,12 @@ class Cell(nn.Module):
         :param weights:
         :return:
         """
-        print('s0:', s0.shape,end='=>')
+        # print('s0:', s0.shape,end='=>')
         s0 = self.preprocess0(s0) # [40, 48, 32, 32], [40, 16, 32, 32]
-        print(s0.shape, self.reduction_prev)
-        print('s1:', s1.shape,end='=>')
+        # print(s0.shape, self.reduction_prev)
+        # print('s1:', s1.shape,end='=>')
         s1 = self.preprocess1(s1) # [40, 48, 32, 32], [40, 16, 32, 32]
-        print(s1.shape)
+        # print(s1.shape)
 
         states = [s0, s1]
         offset = 0
@@ -131,7 +131,7 @@ class Cell(nn.Module):
             offset += len(states)
             # append one state since s is the elem-wise addition of all output
             states.append(s)
-            print('node:',i, s.shape, self.reduction)
+            # print('node:',i, s.shape, self.reduction)
 
         # concat along dim=channel
         return torch.cat(states[-self.multiplier:], dim=1) # 6 of [40, 16, 32, 32]
@@ -250,10 +250,10 @@ class Network(nn.Module):
         :param x:
         :return:
         """
-        print('in:', x.shape)
+        # print('in:', x.shape)
         # s0 & s1 means the last cells' output
         s0 = s1 = self.stem(x) # [b, 3, 32, 32] => [b, 48, 32, 32]
-        print('stem:', s0.shape)
+        # print('stem:', s0.shape)
 
         for i, cell in enumerate(self.cells):
             # weights are shared across all reduction cell or normal cell
@@ -265,8 +265,8 @@ class Network(nn.Module):
                 weights = F.softmax(self.alpha_normal, dim=-1) # [14, 8]
             # execute cell() firstly and then assign s0=s1, s1=result
             s0, s1 = s1, cell(s0, s1, weights) # [40, 64, 32, 32]
-            print('cell:',i, s1.shape, cell.reduction, cell.reduction_prev)
-            print('\n')
+            # print('cell:',i, s1.shape, cell.reduction, cell.reduction_prev)
+            # print('\n')
 
         # s1 is the last cell's output
         out = self.global_pooling(s1)
