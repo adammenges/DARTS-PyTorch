@@ -308,17 +308,19 @@ class Network(nn.Module):
             start = 0
             for i in range(self.steps): # for each node
                 end = start + n
-                W = weights[start:end].copy()
-                edges = sorted(range(i + 2),
-                key=lambda x: -max(W[x][k] for k in range(len(W[x])) if k != PRIMITIVES.index('none'))
-                               )[:2]
-                for j in edges:
+                W = weights[start:end].copy() # [2, 8], [3, 8], ...
+                edges = sorted(range(i + 2), # i+2 is the number of connection for node i
+                            key=lambda x: -max(W[x][k] # by descending order
+                                               for k in range(len(W[x])) # get strongest ops
+                                               if k != PRIMITIVES.index('none'))
+                               )[:2] # only has two inputs
+                for j in edges: # for every input nodes j of current node i
                     k_best = None
-                    for k in range(len(W[j])):
+                    for k in range(len(W[j])): # get strongest ops for current input j->i
                         if k != PRIMITIVES.index('none'):
                             if k_best is None or W[j][k] > W[j][k_best]:
                                 k_best = k
-                    gene.append((PRIMITIVES[k_best], j))
+                    gene.append((PRIMITIVES[k_best], j)) # save ops and input node
                 start = end
                 n += 1
             return gene
