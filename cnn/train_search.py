@@ -43,7 +43,8 @@ parser.add_argument('--arch_lr', type=float, default=3e-4, help='learning rate f
 parser.add_argument('--arch_wd', type=float, default=1e-3, help='weight decay for arch encoding')
 args = parser.parse_args()
 
-
+args.exp_path += str(args.gpu)
+utils.create_exp_dir(args.exp_path)
 
 log_format = '%(asctime)s %(message)s'
 logging.basicConfig(stream=sys.stdout, level=logging.INFO,
@@ -57,7 +58,7 @@ logging.getLogger().addHandler(fh)
 os.environ['CUDA_VISIBLE_DEVICES'] = str(args.gpu)
 device = torch.device('cuda:0')
 
-args.exp_path += str(args.gpu)
+
 
 def main():
 

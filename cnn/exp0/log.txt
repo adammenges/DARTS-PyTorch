@@ -1,0 +1,2 @@
+2019-01-23 11:05:25,657 GPU device = 0
+2019-01-23 11:05:25,658 args = Namespace(arch_lr=0.0003, arch_wd=0.001, batchsz=82, cutout=False, cutout_len=16, data='../data', drop_path_prob=0.3, epochs=50, exp_path='exp0', gpu=0, grad_clip=5, init_ch=16, layers=8, lr=0.025, lr_min=0.001, model_path='saved_models', momentum=0.9, report_freq=50, seed=2, train_portion=0.5, unrolled=True, wd=0.0003)
