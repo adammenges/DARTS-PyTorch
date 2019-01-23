@@ -71,16 +71,21 @@ class Cell(nn.Module):
         :param cpp: 48
         :param cp: 48
         :param c: 16
-        :param reduction: False
-        :param reduction_prev: False
+        :param reduction: indicates whether to reduce the output maps width
+        :param reduction_prev: when previous cell reduced width, s1_d = s0_d//2
+        in order to keep same shape between s1 and s0, we adopt prep0 layer to
+        reduce the s0 width by half.
         """
         super(Cell, self).__init__()
 
         # indicating current cell is reduction or not
         self.reduction = reduction
+        self.reduction_prev = reduction_prev
 
         # preprocess0 deal with output from prev_prev cell
         if reduction_prev:
+            # if prev cell has reduced channel/double width,
+            # it will reduce width by half
             self.preprocess0 = FactorizedReduce(cpp, c, affine=False)
         else:
             self.preprocess0 = ReLUConvBN(cpp, c, 1, 1, 0, affine=False)
@@ -92,12 +97,12 @@ class Cell(nn.Module):
         self.multiplier = multiplier # 4
 
         self.layers = nn.ModuleList()
-        # self.bns = nn.ModuleList()
 
         for i in range(self.steps):
             # for each i inside cell, it connects with all previous output
             # plus previous two cells' output
             for j in range(2 + i):
+                # for reduction cell, it will reduce the heading 2 inputs only
                 stride = 2 if reduction and j < 2 else 1
                 layer = MixedLayer(c, stride)
                 self.layers.append(layer)
@@ -110,8 +115,12 @@ class Cell(nn.Module):
         :param weights:
         :return:
         """
+        print('s0:', s0.shape,end='=>')
         s0 = self.preprocess0(s0) # [40, 48, 32, 32], [40, 16, 32, 32]
+        print(s0.shape, self.reduction_prev)
+        print('s1:', s1.shape,end='=>')
         s1 = self.preprocess1(s1) # [40, 48, 32, 32], [40, 16, 32, 32]
+        print(s1.shape)
 
         states = [s0, s1]
         offset = 0
@@ -122,6 +131,7 @@ class Cell(nn.Module):
             offset += len(states)
             # append one state since s is the elem-wise addition of all output
             states.append(s)
+            print('node:',i, s.shape, self.reduction)
 
         # concat along dim=channel
         return torch.cat(states[-self.multiplier:], dim=1) # 6 of [40, 16, 32, 32]
@@ -226,12 +236,24 @@ class Network(nn.Module):
 
     def forward(self, x):
         """
+        in: torch.Size([3, 3, 32, 32])
+        stem: torch.Size([3, 48, 32, 32])
+        cell: 0 torch.Size([3, 64, 32, 32]) False
+        cell: 1 torch.Size([3, 64, 32, 32]) False
+        cell: 2 torch.Size([3, 128, 16, 16]) True
+        cell: 3 torch.Size([3, 128, 16, 16]) False
+        cell: 4 torch.Size([3, 128, 16, 16]) False
+        cell: 5 torch.Size([3, 256, 8, 8]) True
+        cell: 6 torch.Size([3, 256, 8, 8]) False
+        cell: 7 torch.Size([3, 256, 8, 8]) False
 
         :param x:
         :return:
         """
+        print('in:', x.shape)
         # s0 & s1 means the last cells' output
         s0 = s1 = self.stem(x) # [b, 3, 32, 32] => [b, 48, 32, 32]
+        print('stem:', s0.shape)
 
         for i, cell in enumerate(self.cells):
             # weights are shared across all reduction cell or normal cell
@@ -243,6 +265,8 @@ class Network(nn.Module):
                 weights = F.softmax(self.alpha_normal, dim=-1) # [14, 8]
             # execute cell() firstly and then assign s0=s1, s1=result
             s0, s1 = s1, cell(s0, s1, weights) # [40, 64, 32, 32]
+            print('cell:',i, s1.shape, cell.reduction, cell.reduction_prev)
+            print('\n')
 
         # s1 is the last cell's output
         out = self.global_pooling(s1)

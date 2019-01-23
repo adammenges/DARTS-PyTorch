@@ -43,7 +43,7 @@ parser.add_argument('--arch_lr', type=float, default=3e-4, help='learning rate f
 parser.add_argument('--arch_wd', type=float, default=1e-3, help='weight decay for arch encoding')
 args = parser.parse_args()
 
-args.exp_path += str(args.gpu)
+args.exp_path += str(99)
 utils.create_exp_dir(args.exp_path)
 
 log_format = '%(asctime)s %(message)s'
@@ -72,9 +72,15 @@ def main():
 
     print('Total GPU mem:', total, 'used:', used)
 
-    block_mem = 0.91 * (total - used)
 
-    x = torch.empty((256, 1024, int(block_mem))).cuda()
+    try:
+        block_mem = 0.91 * (total - used)
+        x = torch.empty((256, 1024, int(block_mem))).cuda()
+    except RuntimeError as err:
+        print(err)
+        block_mem = 0.85 * (total - used)
+        x = torch.empty((256, 1024, int(block_mem))).cuda()
+
     print('allocated mem:', x.numel() / 256 / 1024)
     del x
     print('reuse mem now ...')

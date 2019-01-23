@@ -1,0 +1,44 @@
+2019-01-23 11:12:31,898 GPU device = 0
+2019-01-23 11:12:31,898 args = Namespace(arch_lr=0.0003, arch_wd=0.001, batchsz=32, cutout=False, cutout_len=16, data='../data', drop_path_prob=0.3, epochs=50, exp_path='exp99', gpu=0, grad_clip=5, init_ch=16, layers=8, lr=0.025, lr_min=0.001, model_path='saved_models', momentum=0.9, report_freq=50, seed=2, train_portion=0.5, unrolled=True, wd=0.0003)
+2019-01-23 11:12:32,243 Total param size = 1.930842 MB
+2019-01-23 11:12:43,290 
+Epoch: 0 lr: 2.500000e-02
+2019-01-23 11:12:43,291 Genotype: Genotype(normal=[('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('dil_conv_3x3', 1), ('dil_conv_5x5', 2), ('max_pool_3x3', 1), ('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('avg_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('avg_pool_3x3', 1), ('avg_pool_3x3', 0), ('sep_conv_3x3', 1), ('dil_conv_5x5', 2), ('sep_conv_3x3', 2), ('avg_pool_3x3', 3), ('max_pool_3x3', 4), ('dil_conv_5x5', 0)], reduce_concat=range(2, 6))
+2019-01-23 11:51:53,802 GPU device = 0
+2019-01-23 11:51:53,803 args = Namespace(arch_lr=0.0003, arch_wd=0.001, batchsz=32, cutout=False, cutout_len=16, data='../data', drop_path_prob=0.3, epochs=50, exp_path='exp99', gpu=0, grad_clip=5, init_ch=16, layers=8, lr=0.025, lr_min=0.001, model_path='saved_models', momentum=0.9, report_freq=50, seed=2, train_portion=0.5, unrolled=True, wd=0.0003)
+2019-01-23 11:51:54,138 Total param size = 1.930842 MB
+2019-01-23 11:51:55,052 
+Epoch: 0 lr: 2.500000e-02
+2019-01-23 11:51:55,053 Genotype: Genotype(normal=[('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('dil_conv_3x3', 1), ('dil_conv_5x5', 2), ('max_pool_3x3', 1), ('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('avg_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('avg_pool_3x3', 1), ('avg_pool_3x3', 0), ('sep_conv_3x3', 1), ('dil_conv_5x5', 2), ('sep_conv_3x3', 2), ('avg_pool_3x3', 3), ('max_pool_3x3', 4), ('dil_conv_5x5', 0)], reduce_concat=range(2, 6))
+2019-01-23 11:52:03,378 GPU device = 0
+2019-01-23 11:52:03,378 args = Namespace(arch_lr=0.0003, arch_wd=0.001, batchsz=3, cutout=False, cutout_len=16, data='../data', drop_path_prob=0.3, epochs=50, exp_path='exp99', gpu=0, grad_clip=5, init_ch=16, layers=8, lr=0.025, lr_min=0.001, model_path='saved_models', momentum=0.9, report_freq=50, seed=2, train_portion=0.5, unrolled=True, wd=0.0003)
+2019-01-23 11:52:03,716 Total param size = 1.930842 MB
+2019-01-23 11:52:04,607 
+Epoch: 0 lr: 2.500000e-02
+2019-01-23 11:52:04,608 Genotype: Genotype(normal=[('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('dil_conv_3x3', 1), ('dil_conv_5x5', 2), ('max_pool_3x3', 1), ('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('avg_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('avg_pool_3x3', 1), ('avg_pool_3x3', 0), ('sep_conv_3x3', 1), ('dil_conv_5x5', 2), ('sep_conv_3x3', 2), ('avg_pool_3x3', 3), ('max_pool_3x3', 4), ('dil_conv_5x5', 0)], reduce_concat=range(2, 6))
+2019-01-23 11:52:10,650 Step:000 loss:2.393134 acc1:0.000000 acc5:33.333332
+2019-01-23 11:54:02,443 GPU device = 0
+2019-01-23 11:54:02,443 args = Namespace(arch_lr=0.0003, arch_wd=0.001, batchsz=3, cutout=False, cutout_len=16, data='../data', drop_path_prob=0.3, epochs=50, exp_path='exp99', gpu=0, grad_clip=5, init_ch=16, layers=8, lr=0.025, lr_min=0.001, model_path='saved_models', momentum=0.9, report_freq=50, seed=2, train_portion=0.5, unrolled=True, wd=0.0003)
+2019-01-23 11:54:02,777 Total param size = 1.930842 MB
+2019-01-23 11:54:03,695 
+Epoch: 0 lr: 2.500000e-02
+2019-01-23 11:54:03,696 Genotype: Genotype(normal=[('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('dil_conv_3x3', 1), ('dil_conv_5x5', 2), ('max_pool_3x3', 1), ('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('avg_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('avg_pool_3x3', 1), ('avg_pool_3x3', 0), ('sep_conv_3x3', 1), ('dil_conv_5x5', 2), ('sep_conv_3x3', 2), ('avg_pool_3x3', 3), ('max_pool_3x3', 4), ('dil_conv_5x5', 0)], reduce_concat=range(2, 6))
+2019-01-23 11:54:09,928 Step:000 loss:2.393134 acc1:0.000000 acc5:33.333332
+2019-01-23 11:57:41,798 GPU device = 0
+2019-01-23 11:57:41,799 args = Namespace(arch_lr=0.0003, arch_wd=0.001, batchsz=3, cutout=False, cutout_len=16, data='../data', drop_path_prob=0.3, epochs=50, exp_path='exp99', gpu=0, grad_clip=5, init_ch=16, layers=8, lr=0.025, lr_min=0.001, model_path='saved_models', momentum=0.9, report_freq=50, seed=2, train_portion=0.5, unrolled=True, wd=0.0003)
+2019-01-23 11:57:42,149 Total param size = 1.930842 MB
+2019-01-23 11:57:43,101 
+Epoch: 0 lr: 2.500000e-02
+2019-01-23 11:57:43,102 Genotype: Genotype(normal=[('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('dil_conv_3x3', 1), ('dil_conv_5x5', 2), ('max_pool_3x3', 1), ('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('avg_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('avg_pool_3x3', 1), ('avg_pool_3x3', 0), ('sep_conv_3x3', 1), ('dil_conv_5x5', 2), ('sep_conv_3x3', 2), ('avg_pool_3x3', 3), ('max_pool_3x3', 4), ('dil_conv_5x5', 0)], reduce_concat=range(2, 6))
+2019-01-23 12:05:58,713 GPU device = 0
+2019-01-23 12:05:58,714 args = Namespace(arch_lr=0.0003, arch_wd=0.001, batchsz=3, cutout=False, cutout_len=16, data='../data', drop_path_prob=0.3, epochs=50, exp_path='exp99', gpu=0, grad_clip=5, init_ch=16, layers=8, lr=0.025, lr_min=0.001, model_path='saved_models', momentum=0.9, report_freq=50, seed=2, train_portion=0.5, unrolled=True, wd=0.0003)
+2019-01-23 12:05:59,076 Total param size = 1.930842 MB
+2019-01-23 12:05:59,998 
+Epoch: 0 lr: 2.500000e-02
+2019-01-23 12:05:59,999 Genotype: Genotype(normal=[('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('dil_conv_3x3', 1), ('dil_conv_5x5', 2), ('max_pool_3x3', 1), ('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('avg_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('avg_pool_3x3', 1), ('avg_pool_3x3', 0), ('sep_conv_3x3', 1), ('dil_conv_5x5', 2), ('sep_conv_3x3', 2), ('avg_pool_3x3', 3), ('max_pool_3x3', 4), ('dil_conv_5x5', 0)], reduce_concat=range(2, 6))
+2019-01-23 12:08:03,485 GPU device = 0
+2019-01-23 12:08:03,485 args = Namespace(arch_lr=0.0003, arch_wd=0.001, batchsz=3, cutout=False, cutout_len=16, data='../data', drop_path_prob=0.3, epochs=50, exp_path='exp99', gpu=0, grad_clip=5, init_ch=16, layers=8, lr=0.025, lr_min=0.001, model_path='saved_models', momentum=0.9, report_freq=50, seed=2, train_portion=0.5, unrolled=True, wd=0.0003)
+2019-01-23 12:08:03,814 Total param size = 1.930842 MB
+2019-01-23 12:08:04,731 
+Epoch: 0 lr: 2.500000e-02
+2019-01-23 12:08:04,732 Genotype: Genotype(normal=[('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('dil_conv_3x3', 1), ('dil_conv_5x5', 2), ('max_pool_3x3', 1), ('avg_pool_3x3', 0), ('dil_conv_5x5', 1), ('avg_pool_3x3', 0)], normal_concat=range(2, 6), reduce=[('avg_pool_3x3', 1), ('avg_pool_3x3', 0), ('sep_conv_3x3', 1), ('dil_conv_5x5', 2), ('sep_conv_3x3', 2), ('avg_pool_3x3', 3), ('max_pool_3x3', 4), ('dil_conv_5x5', 0)], reduce_concat=range(2, 6))
