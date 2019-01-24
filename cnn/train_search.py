@@ -73,17 +73,17 @@ def main():
     print('Total GPU mem:', total, 'used:', used)
 
 
-    try:
-        block_mem = 0.91 * (total - used)
-        x = torch.empty((256, 1024, int(block_mem))).cuda()
-    except RuntimeError as err:
-        print(err)
-        block_mem = 0.85 * (total - used)
-        x = torch.empty((256, 1024, int(block_mem))).cuda()
-
-    print('allocated mem:', x.numel() / 256 / 1024)
-    del x
-    print('reuse mem now ...')
+    # try:
+    #     block_mem = 0.91 * (total - used)
+    #     x = torch.empty((256, 1024, int(block_mem))).cuda()
+    # except RuntimeError as err:
+    #     print(err)
+    #     block_mem = 0.85 * (total - used)
+    #     x = torch.empty((256, 1024, int(block_mem))).cuda()
+    #
+    # print('allocated mem:', x.numel() / 256 / 1024)
+    # del x
+    # print('reuse mem now ...')
     # ================================================
 
     args.unrolled = True
