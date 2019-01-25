@@ -1,6 +1,10 @@
-## CPU
+## CPU DARTS
 
-DARTS Fork with CPU support
+Fork with CPU support
+
+---
+---
+---
 
 ## PyTorch 0.4.0 ~ 1.0.0 supported
 
