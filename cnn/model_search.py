@@ -4,6 +4,8 @@ import  torch.nn.functional as F
 from    operations import OPS, FactorizedReduce, ReLUConvBN
 from    genotypes import PRIMITIVES, Genotype
 
+device = torch.device('cpu')
+
 
 class MixedLayer(nn.Module):
     """
@@ -229,7 +231,7 @@ class Network(nn.Module):
         However, its weights are left untouched.
         :return:
         """
-        model_new = Network(self.c, self.num_classes, self.layers, self.criterion).cuda()
+        model_new = Network(self.c, self.num_classes, self.layers, self.criterion).to(device)
         for x, y in zip(model_new.arch_parameters(), self.arch_parameters()):
             x.data.copy_(y.data)
         return model_new

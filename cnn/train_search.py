@@ -9,7 +9,7 @@ from    torch import optim
 import  torch.utils
 import  torch.nn.functional as F
 import  torchvision.datasets as dset
-import  torch.backends.cudnn as cudnn
+# import  torch.backends.cudnn as cudnn
 
 from    model_search import Network
 from    arch import Arch
@@ -55,8 +55,8 @@ logging.getLogger().addHandler(fh)
 
 
 
-os.environ['CUDA_VISIBLE_DEVICES'] = str(args.gpu)
-device = torch.device('cuda:0')
+# os.environ['CUDA_VISIBLE_DEVICES'] = str(args.gpu)
+device = torch.device('cpu')
 
 
 
@@ -64,15 +64,15 @@ def main():
 
 
     # ================================================
-    total, used = os.popen(
-        'nvidia-smi --query-gpu=memory.total,memory.used --format=csv,nounits,noheader'
-            ).read().split('\n')[args.gpu].split(',')
-    total = int(total)
-    used = int(used)
+    # total, used = os.popen(
+    #     'nvidia-smi --query-gpu=memory.total,memory.used --format=csv,nounits,noheader'
+    #         ).read().split('\n')[args.gpu].split(',')
+    # total = int(total)
+    # used = int(used)
+    #
+    # print('Total GPU mem:', total, 'used:', used)
 
-    print('Total GPU mem:', total, 'used:', used)
-
-    # 
+    #
     # try:
     #     block_mem = 0.91 * (total - used)
     #     x = torch.empty((256, 1024, int(block_mem))).cuda()
@@ -95,8 +95,8 @@ def main():
     args.unrolled = True
 
     np.random.seed(args.seed)
-    cudnn.benchmark = True
-    cudnn.enabled = True
+    # cudnn.benchmark = True
+    # cudnn.enabled = True
     torch.manual_seed(args.seed)
     logging.info('GPU device = %d' % args.gpu)
     logging.info("args = %s", args)
@@ -120,12 +120,12 @@ def main():
     train_queue = torch.utils.data.DataLoader(
         train_data, batch_size=args.batchsz,
         sampler=torch.utils.data.sampler.SubsetRandomSampler(indices[:split]),
-        pin_memory=True, num_workers=2)
+        pin_memory=False)
 
     valid_queue = torch.utils.data.DataLoader(
         train_data, batch_size=args.batchsz,
         sampler=torch.utils.data.sampler.SubsetRandomSampler(indices[split:]),
-        pin_memory=True, num_workers=2)
+        pin_memory=False)
 
     scheduler = optim.lr_scheduler.CosineAnnealingLR(
                     optimizer, float(args.epochs), eta_min=args.lr_min)
@@ -179,9 +179,9 @@ def train(train_queue, valid_queue, model, arch, criterion, optimizer, lr):
         model.train()
 
         # [b, 3, 32, 32], [40]
-        x, target = x.to(device), target.cuda(non_blocking=True)
+        x, target = x.to(device), target.to(device)
         x_search, target_search = next(valid_iter) # [b, 3, 32, 32], [b]
-        x_search, target_search = x_search.to(device), target_search.cuda(non_blocking=True)
+        x_search, target_search = x_search.to(device), target_search.to(device)
 
         # 1. update alpha
         arch.step(x, target, x_search, target_search, lr, optimizer, unrolled=args.unrolled)
@@ -223,7 +223,7 @@ def infer(valid_queue, model, criterion):
     with torch.no_grad():
         for step, (x, target) in enumerate(valid_queue):
 
-            x, target = x.to(device), target.cuda(non_blocking=True)
+            x, target = x.to(device), target.to(device)
             batchsz = x.size(0)
 
             logits = model(x)
